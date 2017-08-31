@@ -20,8 +20,20 @@
                     id="request-external-monitoring" data-urls="https://*.wikipedia.org/*"
                     class="btn btn-success btn-lg requires-dallinger-extension"
                     style="display:none"
-                    data-onApproved="window.open('https://www.wikipedia.org', '_blank').focus()"
-                    data-onRejected="alert('Please accept the conditions to continue');">Begin</button>
+                    data-instructions="Find the answer to this question on wikipedia:
+                        What DARPA funded project was in relation to time sharing?">Begin</button>
+                <script>
+                    $(function(){
+                        $('#request-external-monitoring').data('participantId', participant_id);
+                        $('#request-external-monitoring').data('experimentURL', window.url);
+                        $('#request-external-monitoring').on('approved', function(evt) {
+                            window.open('https://www.wikipedia.org', '_blank').focus();
+                        });
+                        $('#request-external-monitoring').on('rejected', function(evt) {
+                            alert('Please accept the conditions to continue');
+                        });
+                    })
+                </script>
         </div>
     </body>
     <script>
