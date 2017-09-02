@@ -4,7 +4,7 @@ auto_recruit = true
 webdriver_type = phantomjs
 
 [MTurk]
-n=5
+n=1
 title = Research on Wikipedia
 description = Given a prompt, find the appropriate information on wikipedia while running a custom browser extension.
 keywords = Psychology, research, browserextension
