@@ -24,3 +24,7 @@ class WikiResearch(dallinger.experiment.Experiment):
         """Recruitment."""
         if not self.networks(full=False):
             self.recruiter().close_recruitment()
+
+    def create_network(self):
+        """Return a new network."""
+        return dallinger.networks.Chain(max_size=1)

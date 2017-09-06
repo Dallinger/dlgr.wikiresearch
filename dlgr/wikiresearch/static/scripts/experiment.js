@@ -36,27 +36,21 @@ $(document).ready(function() {
     });
 
     // Submit the questionnaire.
-    $("#submit-questionnaire").click(function() {
-        submitResponses();
-    });
-
-    // Submit the questionnaire.
-    $("#submit-questionnaire").click(function() {
+    $("#end-external-monitoring").click(function() {
         submitResponses();
     });
 });
 
 // Create the agent.
 var create_agent = function() {
-    $('#finish-reading').prop('disabled', true);
+    $('#request-external-monitoring').prop('disabled', true);
     reqwest({
         url: "/node/" + participant_id,
         method: 'post',
         type: 'json',
         success: function (resp) {
-            $('#finish-reading').prop('disabled', false);
+            $('#request-external-monitoring').prop('disabled', false);
             my_node_id = resp.node.id;
-            get_info(my_node_id);
         },
         error: function (err) {
             console.log(err);
