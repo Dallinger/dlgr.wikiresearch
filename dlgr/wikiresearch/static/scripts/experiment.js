@@ -1,4 +1,4 @@
-var my_node_id;
+var dlgr = window.dlgr || {};
 
 // Consent to the experiment.
 $(document).ready(function() {
@@ -49,8 +49,10 @@ var create_agent = function() {
         method: 'post',
         type: 'json',
         success: function (resp) {
+            dlgr.node_id = resp.node.id;
+            $('#request-external-monitoring').attr('data-nodeid', dlgr.node_id);
+            $('#request-external-monitoring').attr('data-experimenturl', window.location.origin);
             $('#request-external-monitoring').prop('disabled', false);
-            my_node_id = resp.node.id;
         },
         error: function (err) {
             console.log(err);
