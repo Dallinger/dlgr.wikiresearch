@@ -37,6 +37,11 @@ $(document).ready(function() {
 
     // Submit the questionnaire.
     $("#end-external-monitoring").click(function() {
+        end_experiment();
+    });
+
+    // Submit the questionnaire.
+    $("#submit-questionnaire").click(function() {
         submitResponses();
     });
 });
@@ -65,4 +70,10 @@ var create_agent = function() {
             }
         }
     });
+};
+
+// Show questionnaire at end
+end_experiment = function() {
+    allow_exit();
+    go_to_page("questionnaire");
 };
