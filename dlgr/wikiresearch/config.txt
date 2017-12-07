@@ -2,9 +2,9 @@
 mode = sandbox
 auto_recruit = true
 webdriver_type = phantomjs
+research_prompt = What DARPA funded project was in relation to time sharing?
 
 [MTurk]
-n=1
 title = Research on Wikipedia
 description = Given a prompt, find the appropriate information on wikipedia while running a custom browser extension.
 keywords = Psychology, research, browserextension

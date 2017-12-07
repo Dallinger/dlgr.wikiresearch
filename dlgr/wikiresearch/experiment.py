@@ -5,7 +5,7 @@ config = dallinger.config.get_config()
 
 
 def extra_parameters():
-    config.register('n', int)
+    config.register('research_prompt', unicode)
 
 
 class WikiResearch(dallinger.experiment.Experiment):
@@ -15,10 +15,14 @@ class WikiResearch(dallinger.experiment.Experiment):
         """Initialize the experiment."""
         super(WikiResearch, self).__init__(session)
         self.experiment_repeats = 1
-        N = config.get("n")
-        self.initial_recruitment_size = N
         if session:
             self.setup()
+
+    def configure(self):
+        self.research_prompt = config.get(
+            'research_prompt',
+            u'What DARPA funded project was in relation to time sharing?'
+        )
 
     def recruit(self):
         """Recruitment."""

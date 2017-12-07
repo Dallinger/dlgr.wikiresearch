@@ -3,77 +3,62 @@ var dlgr = window.dlgr || {};
 // Consent to the experiment.
 $(document).ready(function() {
 
-    // do not allow user to close or reload
-    prevent_exit = true;
-
     // Print the consent form.
     $("#print-consent").click(function() {
-        console.log("hello");
         window.print();
     });
 
     // Consent to the experiment.
     $("#consent").click(function() {
-        store.set("hit_id", getUrlParameter("hit_id"));
-        store.set("worker_id", getUrlParameter("worker_id"));
-        store.set("assignment_id", getUrlParameter("assignment_id"));
-        store.set("mode", getUrlParameter("mode"));
+        store.set("hit_id", dallinger.getUrlParameter("hit_id"));
+        store.set("worker_id", dallinger.getUrlParameter("worker_id"));
+        store.set("assignment_id", dallinger.getUrlParameter("assignment_id"));
+        store.set("mode", dallinger.getUrlParameter("mode"));
 
-        allow_exit();
+        dallinger.allowExit();
         window.location.href = '/instructions';
     });
 
     // Consent to the experiment.
     $("#no-consent").click(function() {
-        allow_exit();
+        dallinger.allowExit();
         window.close();
     });
 
     // Consent to the experiment.
     $("#go-to-experiment").click(function() {
-        allow_exit();
+        dallinger.allowExit();
         window.location.href = '/exp';
     });
 
-    // Submit the questionnaire.
+    // Navigate to the questionnaire.
     $("#end-external-monitoring").click(function() {
-        end_experiment();
+        dallinger.allowExit();
+        dallinger.goToPage("questionnaire");
     });
 
-    // Submit the questionnaire.
-    $("#submit-questionnaire").click(function() {
-        submitResponses();
-    });
-});
-
-// Create the agent.
-var create_agent = function() {
-    $('#request-external-monitoring').prop('disabled', true);
-    reqwest({
-        url: "/node/" + participant_id,
-        method: 'post',
-        type: 'json',
-        success: function (resp) {
+    var $external_monitoring = $('#request-external-monitoring');
+    if ($external_monitoring.length) {
+        $external_monitoring.prop('disabled', true);
+        dallinger.createAgent().done(function (resp) {
             dlgr.node_id = resp.node.id;
-            $('#request-external-monitoring').attr('data-nodeid', dlgr.node_id);
-            $('#request-external-monitoring').attr('data-experimenturl', window.location.origin);
-            $('#request-external-monitoring').prop('disabled', false);
-        },
-        error: function (err) {
+            $external_monitoring.attr('data-nodeid', dlgr.node_id);
+            $external_monitoring.attr('data-experimenturl', window.location.origin);
+            $external_monitoring.prop('disabled', false);
+        }).fail(function (err) {
             console.log(err);
             errorResponse = JSON.parse(err.response);
             if (errorResponse.hasOwnProperty('html')) {
                 $('body').html(errorResponse.html);
             } else {
-                allow_exit();
-                go_to_page('questionnaire');
+                dallinger.allowExit();
+                dallinger.goToPage('questionnaire');
             }
-        }
-    });
-};
-
-// Show questionnaire at end
-end_experiment = function() {
-    allow_exit();
-    go_to_page("questionnaire");
-};
+        });
+        $external_monitoring.on('approved', function() {
+            window.open('https://www.wikipedia.org', '_blank').focus();
+        }).on('rejected', function() {
+            alert('Please accept the conditions to continue');
+        });
+    }
+});
